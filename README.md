@@ -1,36 +1,29 @@
-# ALU Testbench
+# Verilog ALU Testbench
 
-A Verilog testbench for a 32-bit arithmetic logic unit with a 64-bit result and a zero flag. The repository currently contains only `alu_tb.v`.
-
-## What it checks
-
-The testbench compares expected results for arithmetic, comparisons, bitwise operations, shifts, multiplication, and division. Subtraction also checks the zero flag.
+A vector-driven Verilog testbench for a 32-bit ALU with a 64-bit result and a zero flag. Only the testbench is included.
 
 ## Requirements
 
-- A Verilog simulator such as Icarus Verilog or ModelSim.
-- `defines.v` defining the `ALUOP_*` constants.
-- An `alu` module implementing the ports instantiated in `alu_tb.v`.
-- A `data.txt` vector file in the simulator's working directory.
+A Verilog simulator, a compatible `alu` module, `defines.v` defining the operation constants, and a nonempty `data.txt` vector file. The latter three dependencies are absent.
 
-**The definitions, implementation, and vector file are not included in this repository.** Obtain matching files before trying to run the testbench.
+## Getting started
 
-## Vector format
+Obtain the matching definitions, ALU implementation, and vectors. The timescale directive is currently inside the module and must be moved or otherwise resolved for Icarus compatibility before compiling. Then select `alu_tb` as the simulation top and run from the vector-file directory.
 
-Each record has six hexadecimal fields: operation, source operand 0, source operand 1, expected high result, expected low result, and expected zero flag. See the `$fscanf` call in `alu_tb.v` for the exact format.
+## Project structure
 
-## Running the testbench
-
-After supplying the missing files, compile `alu_tb.v` together with the matching ALU implementation, select `alu_tb` as the top-level module, and launch the simulator from the directory containing `data.txt`.
-
-The testbench uses `$stop` for both a mismatch and completion. Inspect its messages and confirm that vectors actually executed: an unreadable or empty vector file can reach the `pass!` message without testing the ALU.
-
-## Repository contents
-
-| File | Purpose |
+| Path | Purpose |
 | --- | --- |
-| `alu_tb.v` | Clock generation, vector loading, and expected-result checks |
+| `alu_tb.v` | Operand generation and expected-result checks |
+
+## Configuration and limitations
+
+Each vector supplies six hexadecimal fields: operation, source operand 0, source operand 1, expected high result, expected low result, and expected zero flag. The bench checks arithmetic, comparisons, bitwise operations, shifts, multiplication/division, and subtraction’s zero flag.
+
+## Development and validation
+
+Both mismatch and completion use `$stop`. An empty/missing vector file can reach the `pass!` message without exercising the ALU. Require actual executed vectors and inspect failure messages; there is no self-contained passing test in this checkout.
 
 ## License
 
-No license file is included. Contact the repository owner before redistributing or incorporating the code into another project.
+No root-level license file is included. Check source-specific notices and obtain permission before redistribution or reuse.
